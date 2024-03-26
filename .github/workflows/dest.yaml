@@ -2,6 +2,7 @@ name: Terraform Delete Bucket Workflow
 
 on:
   workflow_dispatch:
+    branches: [ main ]
     inputs:
       bucket_name:
         description: 'Name of the AWS S3 bucket to delete'
@@ -21,7 +22,7 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
-        with:
+        with:     
           terraform_version: 1.1.0
 
       - name: Terraform Init
