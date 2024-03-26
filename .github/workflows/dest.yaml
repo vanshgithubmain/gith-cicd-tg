@@ -19,25 +19,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Display Inputs
-        run: echo "Bucket Name: $TF_VAR_bucket_name"
-
       - name: Set up AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: <YOUR_AWS_REGION>
+          aws-region: us-east-1   # Adjust the region as per your requirement
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.1.0
+      - name: Download Terraform
+        run: |
+          wget https://releases.hashicorp.com/terraform/1.1.0/terraform_1.1.0_linux_amd64.zip
+          unzip terraform_1.1.0_linux_amd64.zip
+          sudo mv terraform /usr/local/bin/
+          terraform --version
 
       - name: Terraform Init
         run: terraform init
 
-      - name: Terraform Destroy
-        run: |
-          terraform plan -destroy
-          terraform apply -auto-approve
+      - name: Terraform Plan
+        run: terraform plan -destroy
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
